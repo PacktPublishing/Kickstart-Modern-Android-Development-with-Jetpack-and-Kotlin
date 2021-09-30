@@ -45,7 +45,7 @@ fun RestaurantItem(item: Restaurant, itemClicked: (Int) -> Unit) {
             modifier = Modifier.padding(8.dp)
                 .clickable { itemClicked(item.id) }
         ) {
-            RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.15f))
+            RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.30f))
             RestaurantDetails(Modifier.weight(0.7f), item.title, item.description)
         }
     }
