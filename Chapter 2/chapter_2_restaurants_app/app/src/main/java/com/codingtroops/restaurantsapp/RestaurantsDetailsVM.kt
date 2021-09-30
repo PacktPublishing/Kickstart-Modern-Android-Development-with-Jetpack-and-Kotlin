@@ -1,20 +1,9 @@
 package com.codingtroops.restaurantsapp
 
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-
-
-@Composable
-fun RestaurantsDetailsScreen(restaurantId: Int) {
-    val viewModelFactory = RestaurantDetailsVMFactory(restaurantId)
-    val viewModel: RestaurantDetailsVM = viewModel(factory = viewModelFactory)
-    Text(viewModel.restaurantState.value?.title ?: "")
-}
 
 class RestaurantDetailsVM(restaurantId: Int) : ViewModel() {
     val restaurantState: MutableState<Restaurant?> = mutableStateOf(null)
