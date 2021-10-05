@@ -10,32 +10,36 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
 
 @Composable
-fun RestaurantsScreen(itemClicked: (Int) -> Unit) {
+fun RestaurantsScreen() {
+    val viewModel: RestaurantsViewModel = viewModel()
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
             horizontal = 8.dp
         )
     ) {
-        items(dummyRestaurants) { restaurant ->
-            RestaurantItem(restaurant, itemClicked)
+        items(viewModel.getRestaurants()) { restaurant ->//33883
+            RestaurantItem(restaurant)
         }
     }
 }
 
 @Composable
-fun RestaurantItem(item: Restaurant, itemClicked: (Int) -> Unit) {
+fun RestaurantItem(item: Restaurant) {
+    val isFavouriteState = remember { mutableStateOf(false) }
     Card(
         elevation = 4.dp,
         modifier = Modifier.padding(8.dp)
@@ -43,20 +47,26 @@ fun RestaurantItem(item: Restaurant, itemClicked: (Int) -> Unit) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
-                .clickable { itemClicked(item.id) }
         ) {
-            RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.30f))
+            RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.15f))
             RestaurantDetails(Modifier.weight(0.7f), item.title, item.description)
+            RestaurantIcon(
+                if (isFavouriteState.value) Icons.Filled.Favorite
+                else Icons.Filled.FavoriteBorder,
+                Modifier.weight(0.15f)
+            ) { isFavouriteState.value = !isFavouriteState.value }
         }
     }
 }
 
 @Composable
-private fun RestaurantIcon(icon: ImageVector, modifier: Modifier) {
+private fun RestaurantIcon(icon: ImageVector, modifier: Modifier, onClick: () -> Unit = { }) {
     Image(
         imageVector = icon,
         contentDescription = "Restaurant icon",
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
+            .padding(8.dp)
+            .clickable { onClick() }
     )
 }
 
@@ -82,6 +92,6 @@ private fun RestaurantDetails(modifier: Modifier, title: String, description: St
 @Composable
 fun DefaultPreview() {
     RestaurantsAppTheme {
-        RestaurantsScreen() { }
+        RestaurantsScreen()
     }
 }

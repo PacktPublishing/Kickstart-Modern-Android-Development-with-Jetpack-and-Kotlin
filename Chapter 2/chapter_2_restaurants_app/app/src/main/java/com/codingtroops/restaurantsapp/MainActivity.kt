@@ -15,7 +15,6 @@ import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
 
 class MainActivity : ComponentActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -24,9 +23,7 @@ class MainActivity : ComponentActivity() {
             RestaurantsAppTheme {
                 val destination = destinationState.value
                 if (destination is Destination.RestaurantList)
-                    RestaurantsScreen { id ->
-                        destinationState.value = Destination.RestaurantDetails(id)
-                    }
+                    RestaurantsScreen()
                 else if (destination is Destination.RestaurantDetails)
                     RestaurantsDetailsScreen(destination.id)
             }
