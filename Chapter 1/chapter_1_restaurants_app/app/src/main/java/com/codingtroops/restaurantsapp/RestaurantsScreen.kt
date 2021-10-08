@@ -43,8 +43,8 @@ fun RestaurantItem(item: Restaurant) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
         ) {
-            RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.30f))
-            RestaurantDetails(item.title, item.description, Modifier.weight(0.7f))
+            RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.15f))
+            RestaurantDetails(item.title, item.description, Modifier.weight(0.85f))
         }
     }
 }
