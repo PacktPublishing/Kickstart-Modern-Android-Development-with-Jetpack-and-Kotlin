@@ -44,7 +44,7 @@ fun RestaurantItem(item: Restaurant) {
             modifier = Modifier.padding(8.dp)
         ) {
             RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.30f))
-            RestaurantDetails(Modifier.weight(0.7f), item.title, item.description)
+            RestaurantDetails(item.title, item.description, Modifier.weight(0.7f))
         }
     }
 }
@@ -59,7 +59,7 @@ private fun RestaurantIcon(icon: ImageVector, modifier: Modifier) {
 }
 
 @Composable
-private fun RestaurantDetails(modifier: Modifier, title: String, description: String) {
+private fun RestaurantDetails(title: String, description: String, modifier: Modifier) {
     Column(modifier = modifier) {
         Text(
             text = title,
