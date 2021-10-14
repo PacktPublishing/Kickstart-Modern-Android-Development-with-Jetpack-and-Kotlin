@@ -31,15 +31,20 @@ fun RestaurantsScreen() {
             horizontal = 8.dp
         )
     ) {
-        items(viewModel.getRestaurants()) { restaurant ->//33883
-            RestaurantItem(restaurant)
+        items(viewModel.state.value) { restaurant ->
+            RestaurantItem(restaurant) { id ->
+                viewModel.toggleFavorite(id)
+            }
         }
     }
 }
 
 @Composable
-fun RestaurantItem(item: Restaurant) {
-    val isFavouriteState = remember { mutableStateOf(false) }
+fun RestaurantItem(item: Restaurant, onClick: (id: Int) -> Unit) {
+    val icon = if (item.isFavorite)
+        Icons.Filled.Favorite
+    else
+        Icons.Filled.FavoriteBorder
     Card(
         elevation = 4.dp,
         modifier = Modifier.padding(8.dp)
@@ -49,12 +54,10 @@ fun RestaurantItem(item: Restaurant) {
             modifier = Modifier.padding(8.dp)
         ) {
             RestaurantIcon(Icons.Filled.Place, Modifier.weight(0.15f))
-            RestaurantDetails(Modifier.weight(0.7f), item.title, item.description)
-            RestaurantIcon(
-                if (isFavouriteState.value) Icons.Filled.Favorite
-                else Icons.Filled.FavoriteBorder,
-                Modifier.weight(0.15f)
-            ) { isFavouriteState.value = !isFavouriteState.value }
+            RestaurantDetails(item.title, item.description, Modifier.weight(0.7f))
+            RestaurantIcon(icon, Modifier.weight(0.15f)) {
+                onClick(item.id)
+            }
         }
     }
 }
@@ -66,12 +69,11 @@ private fun RestaurantIcon(icon: ImageVector, modifier: Modifier, onClick: () ->
         contentDescription = "Restaurant icon",
         modifier = modifier
             .padding(8.dp)
-            .clickable { onClick() }
-    )
+            .clickable { onClick() })
 }
 
 @Composable
-private fun RestaurantDetails(modifier: Modifier, title: String, description: String) {
+private fun RestaurantDetails(title: String, description: String, modifier: Modifier) {
     Column(modifier = modifier) {
         Text(
             text = title,
