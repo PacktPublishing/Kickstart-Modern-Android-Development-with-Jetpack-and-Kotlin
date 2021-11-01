@@ -3,7 +3,7 @@
     {
       "r_id": 0,
       "r_title": "Alfredo's dishes",
-      "r_description": "At Alfredo's, we provide the best seafood dishes",
+      "r_description": "At Alfredo's, we provide the best seafood dishes.",
       "is_shutdown": true
     },
     {
@@ -20,7 +20,7 @@
     },
     {
       "r_id": 3,
-      "r_title": "Dinner in the clouds",
+      "r_title": "Dinner in the Clouds",
       "r_description": "At DitC, you can experience the full immersive dining experience.",
       "is_shutdown": true
     },
@@ -32,7 +32,7 @@
     },
     {
       "r_id": 5,
-      "r_title": "Food and coffee",
+      "r_title": "Food and Coffee",
       "r_description": "Drink your coffee and then have lunch at FaC!",
       "is_shutdown": true
     },
@@ -51,7 +51,7 @@
     {
       "r_id": 8,
       "r_title": "Uncle Ben's Pizza shop",
-      "r_description": "Relieve the childhood pizza experience at Uncle Ben's pizza shop, now!",
+      "r_description": "Relieve the childhood pizza experience at Uncle Ben's pizza shop!",
       "is_shutdown": true
     },
     {
@@ -68,13 +68,13 @@
     },
     {
       "r_id": 11,
-      "r_title": "Mexican spicy Food in Atlanta",
-      "r_description": "Get your spicy food dose here in Atlanta at Mexican spicy Food!",
+      "r_title": "Mexican Spicy Food in Atlanta",
+      "r_description": "Get your spicy food dose here in Atlanta at Mexican Spicy Food!",
       "is_shutdown": true
     },
     {
       "r_id": 12,
-      "r_title": "Spanish Kitchen reinvented",
+      "r_title": "Spanish Kitchen Reinvented",
       "r_description": "Check out the true culinary experience with spanish dishes in NYC!",
       "is_shutdown": true
     },
