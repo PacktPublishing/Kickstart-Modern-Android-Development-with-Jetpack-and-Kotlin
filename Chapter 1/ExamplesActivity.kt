@@ -57,8 +57,8 @@ fun SuggestiveButton() {
 }
 
 @Composable
-fun MailButton(mailId: Int, navigationCallback: (Int) -> Unit) {
-    Button(onClick = { navigationCallback(mailId) }) {
+fun MailButton(mailId: Int, mailPressedCallback: (Int) -> Unit) {
+    Button(onClick = { mailPressedCallback(mailId) }) {
         Text(text = "Expand mail $mailId")
     }
 }
