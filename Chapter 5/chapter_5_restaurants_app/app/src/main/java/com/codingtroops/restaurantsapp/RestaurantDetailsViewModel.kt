@@ -21,7 +21,7 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
             .build()
         restInterface = retrofit.create(RestaurantsApiService::class.java)
 
-        val id = 2
+        val id = stateHandle.get<Int>("restaurant_id") ?: 0
         viewModelScope.launch {
             val restaurant = getRemoteRestaurant(id)
             state.value = restaurant
