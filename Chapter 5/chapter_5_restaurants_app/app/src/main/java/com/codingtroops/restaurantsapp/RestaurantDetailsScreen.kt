@@ -19,15 +19,20 @@ fun RestaurantDetailsScreen() {
     if (item != null) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                RestaurantDetails(item.title, item.description, Modifier)
-                RestaurantIcon(Icons.Filled.Place, Modifier)
-            }
+            RestaurantIcon(
+                Icons.Filled.Place,
+                Modifier.padding(top = 32.dp, bottom = 32.dp)
+            )
+            RestaurantDetails(
+                item.title,
+                item.description,
+                Modifier.padding(bottom = 32.dp),
+                Alignment.CenterHorizontally
+            )
             Text("More info coming soon!")
         }
     }
