@@ -31,13 +31,16 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
         getRestaurants()
     }
 
-    fun toggleFavorite(itemId: Int) {
+    fun toggleFavorite(itemId: Int, oldValue: Boolean) {
         val restaurants = state.value.toMutableList()
         val itemIndex = restaurants.indexOfFirst { it.id == itemId }
         val item = restaurants[itemIndex]
         restaurants[itemIndex] = item.copy(isFavorite = !item.isFavorite)
         storeSelection(restaurants[itemIndex])
         state.value = restaurants
+        viewModelScope.launch(Dispatchers.IO) {
+            localDatabase.dao.update(PartialRestaurant(itemId, !oldValue))
+        }
     }
 
     private fun storeSelection(item: Restaurant) {
@@ -50,12 +53,12 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
 
     private fun getRestaurants() {
         viewModelScope.launch(errorHandler) {
-            val restaurants = getRemoteRestaurants()
+            val restaurants = getAllRestaurants()
             state.value = restaurants.restoreSelections()
         }
     }
 
-    private suspend fun getRemoteRestaurants(): List<Restaurant> {
+    private suspend fun getAllRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
             if (RestaurantsApplication.getAppContext().isConnected) {
                 val restaurants = restInterface.getRestaurants()
