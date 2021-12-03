@@ -1,5 +1,7 @@
 package com.codingtroops.restaurantsapp
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,6 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewModel() {
     private var restInterface: RestaurantsApiService
+    private var localDatabase = RestaurantsDatabase.getInstance(
+        RestaurantsApplication.getAppContext())
+
     val state = mutableStateOf(emptyList<Restaurant>())
 
     private val errorHandler = CoroutineExceptionHandler { _, exception ->
@@ -52,7 +57,12 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
 
     private suspend fun getRemoteRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
-            restInterface.getRestaurants()
+            if (RestaurantsApplication.getAppContext().isConnected) {
+                val restaurants = restInterface.getRestaurants()
+                localDatabase.dao.addAll(restaurants)
+                return@withContext restaurants
+            } else
+                localDatabase.dao.getAll()
         }
     }
 
@@ -72,3 +82,9 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
     }
 
 }
+
+val Context.isConnected: Boolean
+    get() {
+        return (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+            .activeNetworkInfo?.isConnected == true
+    }
