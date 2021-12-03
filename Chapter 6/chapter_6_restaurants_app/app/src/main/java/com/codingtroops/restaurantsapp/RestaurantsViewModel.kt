@@ -1,17 +1,18 @@
 package com.codingtroops.restaurantsapp
 
-import android.content.Context
-import android.net.ConnectivityManager
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.UnknownHostException
 
 
-class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewModel() {
+class RestaurantsViewModel() : ViewModel() {
     private var restInterface: RestaurantsApiService
     private var localDatabase = RestaurantsDatabase.getInstance(
         RestaurantsApplication.getAppContext())
@@ -32,62 +33,41 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
     }
 
     fun toggleFavorite(itemId: Int, oldValue: Boolean) {
-        val restaurants = state.value.toMutableList()
-        val itemIndex = restaurants.indexOfFirst { it.id == itemId }
-        val item = restaurants[itemIndex]
-        restaurants[itemIndex] = item.copy(isFavorite = !item.isFavorite)
-        storeSelection(restaurants[itemIndex])
-        state.value = restaurants
-        viewModelScope.launch(Dispatchers.IO) {
-            localDatabase.dao.update(PartialRestaurant(itemId, !oldValue))
+        viewModelScope.launch(errorHandler) {
+            val updatedRestaurants = updateRestaurant(itemId, oldValue)
+            state.value = updatedRestaurants
         }
     }
 
-    private fun storeSelection(item: Restaurant) {
-        val savedToggled = stateHandle.get<List<Int>?>(FAVORITES)
-            .orEmpty().toMutableList()
-        if (item.isFavorite) savedToggled.add(item.id)
-        else savedToggled.remove(item.id)
-        stateHandle[FAVORITES] = savedToggled
+    private suspend fun updateRestaurant(itemId: Int, oldValue: Boolean): List<Restaurant> {
+        return withContext(Dispatchers.IO) {
+            localDatabase.dao.update(PartialRestaurant(itemId, !oldValue))
+            return@withContext localDatabase.dao.getAll()
+        }
     }
 
     private fun getRestaurants() {
         viewModelScope.launch(errorHandler) {
-            val restaurants = getAllRestaurants()
-            state.value = restaurants.restoreSelections()
+            state.value = getAllRestaurants()
         }
     }
 
     private suspend fun getAllRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
-            if (RestaurantsApplication.getAppContext().isConnected) {
-                val restaurants = restInterface.getRestaurants()
-                localDatabase.dao.addAll(restaurants)
-                return@withContext restaurants
-            } else
-                localDatabase.dao.getAll()
-        }
-    }
-
-    private fun List<Restaurant>.restoreSelections(): List<Restaurant> {
-        stateHandle.get<List<Int>?>(FAVORITES)?.let { selectedIds ->
-            val restaurantsMap = this.associateBy { it.id }
-            selectedIds.forEach { id ->
-                restaurantsMap[id]?.isFavorite = true
+            try {
+                val favoriteRestaurants = localDatabase.dao.getAllFavorited()
+                val remoteRestaurants = restInterface.getRestaurants()
+                localDatabase.dao.addAll(remoteRestaurants)
+                localDatabase.dao.updateAll(
+                    favoriteRestaurants.map {
+                        PartialRestaurant(it.id, true)
+                    })
+            } catch (e: IOException) {
+                if (localDatabase.dao.getAll().isEmpty())
+                    throw Exception("No data to show")
             }
-            return restaurantsMap.values.toList()
+            return@withContext localDatabase.dao.getAll()
         }
-        return this
-    }
-
-    companion object {
-        const val FAVORITES = "favorites"
     }
 
 }
-
-val Context.isConnected: Boolean
-    get() {
-        return (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-            .activeNetworkInfo?.isConnected == true
-    }
