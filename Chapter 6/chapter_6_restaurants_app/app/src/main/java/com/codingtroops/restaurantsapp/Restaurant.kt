@@ -17,5 +17,6 @@ data class Restaurant(
     @ColumnInfo(name = "r_description")
     @SerializedName("r_description")
     val description: String,
-    var isFavorite: Boolean = false
+    @ColumnInfo(name = "is_favorite")
+    val isFavorite: Boolean = false
 )
