@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "restaurants")
 data class Restaurant(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey()
     @ColumnInfo(name = "r_id")
     @SerializedName("r_id")
     val id: Int,
@@ -19,13 +19,4 @@ data class Restaurant(
     val description: String,
     @ColumnInfo(name = "is_favorite")
     val isFavorite: Boolean = false
-)
-
-@Entity
-class PartialRestaurant(
-    @ColumnInfo(name = "r_id")
-    val id: Int,
-
-    @ColumnInfo(name = "is_favorite")
-    var isFavorite: Boolean
 )

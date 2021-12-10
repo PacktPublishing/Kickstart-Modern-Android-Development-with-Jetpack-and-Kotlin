@@ -8,13 +8,13 @@ import kotlinx.coroutines.*
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
+import java.net.ConnectException
 import java.net.UnknownHostException
 
 
 class RestaurantsViewModel() : ViewModel() {
     private var restInterface: RestaurantsApiService
-    private var localDatabase = RestaurantsDatabase.getInstance(
+    private var restaurantsDao = RestaurantsDb.getDaoInstance(
         RestaurantsApplication.getAppContext())
 
     val state = mutableStateOf(emptyList<Restaurant>())
@@ -34,17 +34,20 @@ class RestaurantsViewModel() : ViewModel() {
 
     fun toggleFavorite(itemId: Int, oldValue: Boolean) {
         viewModelScope.launch(errorHandler) {
-            val updatedRestaurants = updateRestaurant(itemId, oldValue)
+            val updatedRestaurants =
+                toggleFavoriteRestaurant(itemId, oldValue)
             state.value = updatedRestaurants
         }
     }
 
-    private suspend fun updateRestaurant(itemId: Int, oldValue: Boolean): List<Restaurant> {
-        return withContext(Dispatchers.IO) {
-            localDatabase.dao.update(PartialRestaurant(itemId, !oldValue))
-            return@withContext localDatabase.dao.getAll()
+    private suspend fun toggleFavoriteRestaurant(
+        id: Int,
+        oldValue: Boolean
+    ) = withContext(Dispatchers.IO) {
+            restaurantsDao.update(
+                PartialRestaurant(id = id, isFavorite = !oldValue))
+            restaurantsDao.getAll()
         }
-    }
 
     private fun getRestaurants() {
         viewModelScope.launch(errorHandler) {
@@ -54,20 +57,34 @@ class RestaurantsViewModel() : ViewModel() {
 
     private suspend fun getAllRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
+            val cachedRestaurants = restaurantsDao.getAll()
             try {
-                val favoriteRestaurants = localDatabase.dao.getAllFavorited()
-                val remoteRestaurants = restInterface.getRestaurants()
-                localDatabase.dao.addAll(remoteRestaurants)
-                localDatabase.dao.updateAll(
-                    favoriteRestaurants.map {
-                        PartialRestaurant(it.id, true)
-                    })
-            } catch (e: IOException) {
-                if (localDatabase.dao.getAll().isEmpty())
-                    throw Exception("No data to show")
+                refreshCache()
+            } catch (e: Exception) {
+                when (e) {
+                    is UnknownHostException,
+                    is ConnectException,
+                    is HttpException -> {
+                        if (cachedRestaurants.isEmpty())
+                            throw Exception(
+                                "Something went wrong. " +
+                                        "We have no data.")
+                    }
+                    else -> throw e
+                }
             }
-            return@withContext localDatabase.dao.getAll()
+            return@withContext cachedRestaurants
         }
+    }
+
+    private suspend fun refreshCache() {
+        val remoteRestaurants = restInterface.getRestaurants()
+        val favoriteRestaurants = restaurantsDao.getAllFavorited()
+        restaurantsDao.addAll(remoteRestaurants)
+        restaurantsDao.updateAll(
+            favoriteRestaurants.map {
+                PartialRestaurant(it.id, true)
+            })
     }
 
 }
