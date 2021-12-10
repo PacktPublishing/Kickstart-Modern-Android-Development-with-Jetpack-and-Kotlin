@@ -12,7 +12,7 @@ import java.net.ConnectException
 import java.net.UnknownHostException
 
 
-class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewModel() {
+class RestaurantsViewModel() : ViewModel() {
     private var restInterface: RestaurantsApiService
     private var restaurantsDao = RestaurantsDb.getDaoInstance(
         RestaurantsApplication.getAppContext())
@@ -32,16 +32,11 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
         getRestaurants()
     }
 
-    fun toggleFavorite(itemId: Int) {
-        val restaurants = state.value.toMutableList()
-        val itemIndex = restaurants.indexOfFirst { it.id == itemId }
-        val item = restaurants[itemIndex]
-        restaurants[itemIndex] = item.copy(
-            isFavorite = !item.isFavorite)
-        storeSelection(restaurants[itemIndex])
-        state.value = restaurants
-        viewModelScope.launch {
-            toggleFavoriteRestaurant(itemId, item.isFavorite)
+    fun toggleFavorite(itemId: Int, oldValue: Boolean) {
+        viewModelScope.launch(errorHandler) {
+            val updatedRestaurants =
+                toggleFavoriteRestaurant(itemId, oldValue)
+            state.value = updatedRestaurants
         }
     }
 
@@ -51,59 +46,45 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
     ) = withContext(Dispatchers.IO) {
             restaurantsDao.update(
                 PartialRestaurant(id = id, isFavorite = !oldValue))
+            restaurantsDao.getAll()
         }
-
-    private fun storeSelection(item: Restaurant) {
-        val savedToggled = stateHandle.get<List<Int>?>(FAVORITES)
-            .orEmpty().toMutableList()
-        if (item.isFavorite) savedToggled.add(item.id)
-        else savedToggled.remove(item.id)
-        stateHandle[FAVORITES] = savedToggled
-    }
 
     private fun getRestaurants() {
         viewModelScope.launch(errorHandler) {
-            val restaurants = getAllRestaurants()
-            state.value = restaurants.restoreSelections()
+            state.value = getAllRestaurants()
         }
     }
 
     private suspend fun getAllRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
+            val cachedRestaurants = restaurantsDao.getAll()
             try {
-                val restaurants = restInterface.getRestaurants()
-                restaurantsDao.addAll(restaurants)
-                return@withContext restaurants
+                refreshCache()
             } catch (e: Exception) {
                 when (e) {
                     is UnknownHostException,
                     is ConnectException,
                     is HttpException -> {
-                        return@withContext restaurantsDao.getAll()
+                        if (cachedRestaurants.isEmpty())
+                            throw Exception(
+                                "Something went wrong. " +
+                                        "We have no data.")
                     }
                     else -> throw e
                 }
             }
+            return@withContext cachedRestaurants
         }
     }
 
-    private fun List<Restaurant>.restoreSelections(): List<Restaurant> {
-        stateHandle.get<List<Int>?>(FAVORITES)?.let { selectedIds ->
-            val restaurantsMap = this.associateBy { it.id }
-                .toMutableMap()
-            selectedIds.forEach { id ->
-                val restaurant =
-                    restaurantsMap[id] ?: return@forEach
-                restaurantsMap[id] =
-                    restaurant.copy(isFavorite = true)
-            }
-            return restaurantsMap.values.toList()
-        }
-        return this
-    }
-
-    companion object {
-        const val FAVORITES = "favorites"
+    private suspend fun refreshCache() {
+        val remoteRestaurants = restInterface.getRestaurants()
+        val favoriteRestaurants = restaurantsDao.getAllFavorited()
+        restaurantsDao.addAll(remoteRestaurants)
+        restaurantsDao.updateAll(
+            favoriteRestaurants.map {
+                PartialRestaurant(it.id, true)
+            })
     }
 
 }
