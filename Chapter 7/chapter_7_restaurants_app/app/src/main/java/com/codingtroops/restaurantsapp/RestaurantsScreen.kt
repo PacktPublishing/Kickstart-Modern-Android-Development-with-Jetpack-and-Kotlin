@@ -2,10 +2,7 @@ package com.codingtroops.restaurantsapp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -25,18 +22,26 @@ import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
 @Composable
 fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
     val viewModel: RestaurantsViewModel = viewModel()
-    LazyColumn(
-        contentPadding = PaddingValues(
-            vertical = 8.dp,
-            horizontal = 8.dp
-        )
-    ) {
-        items(viewModel.state.value) { restaurant ->
-            RestaurantItem(restaurant,
-                onFavoriteClick = { id, oldValue ->
-                    viewModel.toggleFavorite(id, oldValue) },
-                onItemClick = { id -> onItemClick(id) })
+    val restaurants = viewModel.state.value
+    val isLoading = restaurants.isEmpty()
+    Box(contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            contentPadding = PaddingValues(
+                vertical = 8.dp,
+                horizontal = 8.dp
+            )
+        ) {
+            items(restaurants) { restaurant ->
+                RestaurantItem(restaurant,
+                    onFavoriteClick = { id, oldValue ->
+                        viewModel.toggleFavorite(id, oldValue) },
+                    onItemClick = { id -> onItemClick(id) })
+            }
         }
+
+        if(isLoading)
+            CircularProgressIndicator()
     }
 }
 
