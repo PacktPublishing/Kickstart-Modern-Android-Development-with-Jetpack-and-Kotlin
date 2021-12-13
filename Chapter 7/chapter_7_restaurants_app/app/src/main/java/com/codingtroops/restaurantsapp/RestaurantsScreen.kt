@@ -22,8 +22,7 @@ import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
 @Composable
 fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
     val viewModel: RestaurantsViewModel = viewModel()
-    val restaurants = viewModel.state.value
-    val isLoading = restaurants.isEmpty()
+    val state = viewModel.state.value
     Box(contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -32,7 +31,7 @@ fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
                 horizontal = 8.dp
             )
         ) {
-            items(restaurants) { restaurant ->
+            items(state.restaurants) { restaurant ->
                 RestaurantItem(restaurant,
                     onFavoriteClick = { id, oldValue ->
                         viewModel.toggleFavorite(id, oldValue) },
@@ -40,8 +39,10 @@ fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
             }
         }
 
-        if(isLoading)
+        if(state.isLoading)
             CircularProgressIndicator()
+        if(state.error != null)
+            Text(state.error)
     }
 }
 
