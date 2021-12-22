@@ -31,7 +31,6 @@ class RestaurantsRepository {
 
     suspend fun getAllRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
-            val cachedRestaurants = restaurantsDao.getAll()
             try {
                 refreshCache()
             } catch (e: Exception) {
@@ -39,7 +38,7 @@ class RestaurantsRepository {
                     is UnknownHostException,
                     is ConnectException,
                     is HttpException -> {
-                        if (cachedRestaurants.isEmpty())
+                        if (restaurantsDao.getAll().isEmpty())
                             throw Exception(
                                 "Something went wrong. " +
                                         "We have no data.")
@@ -47,7 +46,7 @@ class RestaurantsRepository {
                     else -> throw e
                 }
             }
-            return@withContext cachedRestaurants
+            return@withContext restaurantsDao.getAll()
         }
     }
 
