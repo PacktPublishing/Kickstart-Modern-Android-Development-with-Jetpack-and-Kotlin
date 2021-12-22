@@ -1,6 +1,5 @@
 package com.codingtroops.restaurantsapp
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -12,18 +11,15 @@ class RestaurantsViewModel() : ViewModel() {
 
     private val repository = RestaurantsRepository()
 
-    private val _state: MutableState<RestaurantsScreenState> = mutableStateOf(
-        RestaurantsScreenState(
-            restaurants = listOf(),
-            isLoading = true,
-            error = null
-        )
-    )
-    val state: State<RestaurantsScreenState> = _state
+    private val _state = mutableStateOf(RestaurantsScreenState(
+        restaurants = listOf(),
+        isLoading = true))
+    val state: State<RestaurantsScreenState>
+        get() = _state
 
     private val errorHandler = CoroutineExceptionHandler { _, exception ->
         exception.printStackTrace()
-        _state.value = _state.value.copy(error = exception.message)
+        _state.value = _state.value.copy(error = exception.message, isLoading = false)
     }
 
     init {
