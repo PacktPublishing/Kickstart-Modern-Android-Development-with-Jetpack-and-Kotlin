@@ -57,7 +57,6 @@ class RestaurantsViewModel() : ViewModel() {
 
     private suspend fun getAllRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
-            val cachedRestaurants = restaurantsDao.getAll()
             try {
                 refreshCache()
             } catch (e: Exception) {
@@ -65,7 +64,7 @@ class RestaurantsViewModel() : ViewModel() {
                     is UnknownHostException,
                     is ConnectException,
                     is HttpException -> {
-                        if (cachedRestaurants.isEmpty())
+                        if (restaurantsDao.getAll().isEmpty())
                             throw Exception(
                                 "Something went wrong. " +
                                         "We have no data.")
@@ -73,7 +72,7 @@ class RestaurantsViewModel() : ViewModel() {
                     else -> throw e
                 }
             }
-            return@withContext cachedRestaurants
+            return@withContext restaurantsDao.getAll()
         }
     }
 
