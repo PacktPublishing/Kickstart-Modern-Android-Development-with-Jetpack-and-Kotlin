@@ -1,4 +1,4 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.presentation.list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,7 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
+import com.codingtroops.restaurantsapp.Restaurant
+import com.codingtroops.restaurantsapp.theme.RestaurantsAppTheme
 
 @Composable
 fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {

@@ -1,4 +1,6 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.presentation.list
+
+import com.codingtroops.restaurantsapp.Restaurant
 
 data class RestaurantsScreenState(
     val restaurants: List<Restaurant>,

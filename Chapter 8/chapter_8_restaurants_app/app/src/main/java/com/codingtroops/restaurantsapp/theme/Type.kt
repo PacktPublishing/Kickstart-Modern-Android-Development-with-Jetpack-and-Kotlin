@@ -1,4 +1,4 @@
-package com.codingtroops.restaurantsapp.ui.theme
+package com.codingtroops.restaurantsapp.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

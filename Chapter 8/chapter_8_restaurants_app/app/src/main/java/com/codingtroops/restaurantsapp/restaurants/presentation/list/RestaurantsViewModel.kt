@@ -1,9 +1,12 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.presentation.list
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codingtroops.restaurantsapp.restaurants.domain.GetRestaurantsUseCase
+import com.codingtroops.restaurantsapp.restaurants.domain.ToggleRestaurantUseCase
+import com.codingtroops.restaurantsapp.restaurants.presentation.list.RestaurantsScreenState
 import kotlinx.coroutines.*
 
 
@@ -12,9 +15,11 @@ class RestaurantsViewModel() : ViewModel() {
     private val getRestaurantsUseCase = GetRestaurantsUseCase()
     private val toggleRestaurantsUseCase = ToggleRestaurantUseCase()
 
-    private val _state = mutableStateOf(RestaurantsScreenState(
+    private val _state = mutableStateOf(
+        RestaurantsScreenState(
         restaurants = listOf(),
-        isLoading = true))
+        isLoading = true)
+    )
     val state: State<RestaurantsScreenState>
         get() = _state
 

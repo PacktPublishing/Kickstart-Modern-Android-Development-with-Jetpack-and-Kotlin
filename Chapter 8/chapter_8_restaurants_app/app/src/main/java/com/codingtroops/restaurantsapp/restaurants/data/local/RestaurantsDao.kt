@@ -1,7 +1,9 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.data.local
 
 
 import androidx.room.*
+import com.codingtroops.restaurantsapp.PartialRestaurant
+import com.codingtroops.restaurantsapp.Restaurant
 
 
 @Dao
