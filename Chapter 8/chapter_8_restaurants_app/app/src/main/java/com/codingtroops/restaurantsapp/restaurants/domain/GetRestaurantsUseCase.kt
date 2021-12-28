@@ -4,8 +4,9 @@ import com.codingtroops.restaurantsapp.restaurants.data.RestaurantsRepository
 
 class GetRestaurantsUseCase {
     private val repository: IRestaurantsRepository = RestaurantsRepository()
+    private val getSortedRestaurantsUseCase = GetSortedRestaurantsUseCase()
     suspend operator fun invoke(): List<Restaurant> {
-        return repository.getAllRestaurants()
-            .sortedByDescending { it.isShutdown }
+        repository.loadRestaurants()
+        return getSortedRestaurantsUseCase()
     }
 }

@@ -33,12 +33,17 @@ class RestaurantsRepository: IRestaurantsRepository {
         restaurantsDao.update(
             PartialLocalRestaurant(id = id, isFavorite = value)
         )
-        restaurantsDao.getAll().map {
-            Restaurant(it.id, it.title, it.description, it.isFavorite, it.isShutdown)
+    }
+
+    override suspend fun getRestaurants(): List<Restaurant> {
+        return withContext(Dispatchers.IO) {
+            restaurantsDao.getAll().map {
+                Restaurant(it.id, it.title, it.description, it.isFavorite, it.isShutdown)
+            }
         }
     }
 
-    override suspend fun getAllRestaurants(): List<Restaurant> {
+    override suspend fun loadRestaurants() {
         return withContext(Dispatchers.IO) {
             try {
                 refreshCache()
@@ -54,9 +59,6 @@ class RestaurantsRepository: IRestaurantsRepository {
                     }
                     else -> throw e
                 }
-            }
-            return@withContext restaurantsDao.getAll().map {
-                Restaurant(it.id, it.title, it.description, it.isFavorite, it.isShutdown)
             }
         }
     }
