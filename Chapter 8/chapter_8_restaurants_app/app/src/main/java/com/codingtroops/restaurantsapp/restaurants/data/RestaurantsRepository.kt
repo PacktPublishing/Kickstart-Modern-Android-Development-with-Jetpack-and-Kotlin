@@ -3,6 +3,7 @@ package com.codingtroops.restaurantsapp.restaurants.data
 import com.codingtroops.restaurantsapp.*
 import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDb
 import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
+import com.codingtroops.restaurantsapp.restaurants.domain.IRestaurantsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.net.ConnectException
 import java.net.UnknownHostException
 
-class RestaurantsRepository {
+class RestaurantsRepository: IRestaurantsRepository {
     private var restInterface: RestaurantsApiService =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -22,7 +23,7 @@ class RestaurantsRepository {
         RestaurantsApplication.getAppContext()
     )
 
-    suspend fun toggleFavoriteRestaurant(
+    override suspend fun toggleFavoriteRestaurant(
         id: Int,
         value: Boolean
     ) = withContext(Dispatchers.IO) {
@@ -32,7 +33,7 @@ class RestaurantsRepository {
         restaurantsDao.getAll()
     }
 
-    suspend fun getAllRestaurants(): List<Restaurant> {
+    override suspend fun getAllRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
             try {
                 refreshCache()
