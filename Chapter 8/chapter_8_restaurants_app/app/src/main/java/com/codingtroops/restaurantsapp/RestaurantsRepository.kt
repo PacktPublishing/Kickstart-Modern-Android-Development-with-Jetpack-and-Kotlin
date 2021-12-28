@@ -46,7 +46,7 @@ class RestaurantsRepository {
                     else -> throw e
                 }
             }
-            return@withContext restaurantsDao.getAll()
+            return@withContext restaurantsDao.getAll().sortedBy { it.isShutdown }
         }
     }
 
