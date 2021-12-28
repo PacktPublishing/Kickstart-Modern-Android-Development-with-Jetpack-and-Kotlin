@@ -1,9 +1,12 @@
 package com.codingtroops.restaurantsapp.restaurants.data
 
 import com.codingtroops.restaurantsapp.*
+import com.codingtroops.restaurantsapp.restaurants.data.local.LocalRestaurant
+import com.codingtroops.restaurantsapp.restaurants.data.local.PartialLocalRestaurant
 import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDb
 import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
 import com.codingtroops.restaurantsapp.restaurants.domain.IRestaurantsRepository
+import com.codingtroops.restaurantsapp.restaurants.domain.Restaurant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -28,9 +31,11 @@ class RestaurantsRepository: IRestaurantsRepository {
         value: Boolean
     ) = withContext(Dispatchers.IO) {
         restaurantsDao.update(
-            PartialRestaurant(id = id, isFavorite = value)
+            PartialLocalRestaurant(id = id, isFavorite = value)
         )
-        restaurantsDao.getAll()
+        restaurantsDao.getAll().map {
+            Restaurant(it.id, it.title, it.description, it.isFavorite, it.isShutdown)
+        }
     }
 
     override suspend fun getAllRestaurants(): List<Restaurant> {
@@ -50,17 +55,21 @@ class RestaurantsRepository: IRestaurantsRepository {
                     else -> throw e
                 }
             }
-            return@withContext restaurantsDao.getAll()
+            return@withContext restaurantsDao.getAll().map {
+                Restaurant(it.id, it.title, it.description, it.isFavorite, it.isShutdown)
+            }
         }
     }
 
     private suspend fun refreshCache() {
         val remoteRestaurants = restInterface.getRestaurants()
         val favoriteRestaurants = restaurantsDao.getAllFavorited()
-        restaurantsDao.addAll(remoteRestaurants)
+        restaurantsDao.addAll(remoteRestaurants.map {
+            LocalRestaurant(it.id, it.title, it.description, false, it.isShutdown)
+        })
         restaurantsDao.updateAll(
             favoriteRestaurants.map {
-                PartialRestaurant(it.id, true)
+                PartialLocalRestaurant(it.id, true)
             })
     }
 }

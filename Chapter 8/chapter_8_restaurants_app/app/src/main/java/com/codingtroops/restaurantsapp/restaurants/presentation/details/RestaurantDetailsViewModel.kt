@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codingtroops.restaurantsapp.Restaurant
+import com.codingtroops.restaurantsapp.restaurants.domain.Restaurant
 import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +33,10 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
     private suspend fun getRemoteRestaurant(id: Int): Restaurant? {
         return withContext(Dispatchers.IO) {
             val response =  restInterface.getRestaurant(id)
-            return@withContext response[id.toString()]
+            return@withContext response[id.toString()]?.let {
+                Restaurant(id = it.id, title = it.title,
+                    description = it.description, isShutdown = it.isShutdown)
+            }
         }
     }
 }

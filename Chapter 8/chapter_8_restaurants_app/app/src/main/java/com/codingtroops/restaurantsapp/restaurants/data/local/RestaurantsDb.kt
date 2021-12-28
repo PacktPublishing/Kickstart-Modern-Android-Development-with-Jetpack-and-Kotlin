@@ -5,12 +5,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.codingtroops.restaurantsapp.Restaurant
 
 
 @Database(
-    entities = [Restaurant::class],
-    version = 3,
+    entities = [LocalRestaurant::class],
+    version = 4,
     exportSchema = false
 )
 abstract class RestaurantsDb : RoomDatabase() {
