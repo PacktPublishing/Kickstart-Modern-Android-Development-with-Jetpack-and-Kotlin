@@ -21,10 +21,10 @@ class RestaurantsRepository {
 
     suspend fun toggleFavoriteRestaurant(
         id: Int,
-        oldValue: Boolean
+        value: Boolean
     ) = withContext(Dispatchers.IO) {
         restaurantsDao.update(
-            PartialRestaurant(id = id, isFavorite = !oldValue))
+            PartialRestaurant(id = id, isFavorite = value))
         restaurantsDao.getAll()
     }
 
