@@ -25,10 +25,15 @@ class RestaurantsRepository {
     ) = withContext(Dispatchers.IO) {
         restaurantsDao.update(
             PartialRestaurant(id = id, isFavorite = value))
-        restaurantsDao.getAll()
     }
 
-    suspend fun getAllRestaurants(): List<Restaurant> {
+    suspend fun getRestaurants() : List<Restaurant> {
+        return withContext(Dispatchers.IO) {
+            return@withContext restaurantsDao.getAll()
+        }
+    }
+
+    suspend fun loadRestaurants() {
         return withContext(Dispatchers.IO) {
             try {
                 refreshCache()
@@ -45,7 +50,6 @@ class RestaurantsRepository {
                     else -> throw e
                 }
             }
-            return@withContext restaurantsDao.getAll()
         }
     }
 

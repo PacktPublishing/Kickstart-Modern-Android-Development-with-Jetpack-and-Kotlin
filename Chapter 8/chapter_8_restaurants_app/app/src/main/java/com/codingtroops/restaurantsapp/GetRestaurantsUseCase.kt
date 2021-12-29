@@ -2,9 +2,10 @@ package com.codingtroops.restaurantsapp
 
 class GetRestaurantsUseCase {
     private val repository: RestaurantsRepository = RestaurantsRepository()
+    private val getSortedRestaurantsUseCase = GetSortedRestaurantsUseCase()
     suspend operator fun invoke(): List<Restaurant> {
-        return repository.getAllRestaurants()
-            .sortedBy { it.title }
+        repository.loadRestaurants()
+        return getSortedRestaurantsUseCase()
     }
 }
 
