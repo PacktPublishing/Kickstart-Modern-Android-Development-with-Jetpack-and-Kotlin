@@ -25,7 +25,7 @@ class RestaurantsRepository {
     ) = withContext(Dispatchers.IO) {
         restaurantsDao.update(
             PartialRestaurant(id = id, isFavorite = !oldValue))
-        restaurantsDao.getAll().sortedBy { it.title }
+        restaurantsDao.getAll()
     }
 
     suspend fun getAllRestaurants(): List<Restaurant> {
@@ -45,7 +45,7 @@ class RestaurantsRepository {
                     else -> throw e
                 }
             }
-            return@withContext restaurantsDao.getAll().sortedBy { it.title }
+            return@withContext restaurantsDao.getAll()
         }
     }
 
