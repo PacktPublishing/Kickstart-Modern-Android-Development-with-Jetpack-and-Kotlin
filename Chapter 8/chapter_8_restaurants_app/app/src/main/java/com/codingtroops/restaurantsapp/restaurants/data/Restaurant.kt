@@ -1,4 +1,4 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

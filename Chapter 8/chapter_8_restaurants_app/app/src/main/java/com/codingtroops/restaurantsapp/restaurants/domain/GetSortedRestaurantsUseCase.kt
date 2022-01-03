@@ -1,4 +1,7 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.domain
+
+import com.codingtroops.restaurantsapp.restaurants.data.Restaurant
+import com.codingtroops.restaurantsapp.restaurants.data.RestaurantsRepository
 
 
 class GetSortedRestaurantsUseCase {

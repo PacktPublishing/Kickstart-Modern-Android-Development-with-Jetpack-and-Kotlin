@@ -1,4 +1,4 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
+import com.codingtroops.restaurantsapp.restaurants.presentation.details.RestaurantDetailsScreen
+import com.codingtroops.restaurantsapp.restaurants.presentation.list.RestaurantsScreen
+import com.codingtroops.restaurantsapp.theme.RestaurantsAppTheme
 
 class MainActivity : ComponentActivity() {
 

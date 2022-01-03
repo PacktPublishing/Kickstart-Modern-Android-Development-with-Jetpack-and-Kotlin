@@ -1,5 +1,8 @@
-package com.codingtroops.restaurantsapp
+package com.codingtroops.restaurantsapp.restaurants.data
 
+import com.codingtroops.restaurantsapp.*
+import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDb
+import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -24,7 +27,8 @@ class RestaurantsRepository {
         value: Boolean
     ) = withContext(Dispatchers.IO) {
         restaurantsDao.update(
-            PartialRestaurant(id = id, isFavorite = value))
+            PartialRestaurant(id = id, isFavorite = value)
+        )
     }
 
     suspend fun getRestaurants() : List<Restaurant> {
