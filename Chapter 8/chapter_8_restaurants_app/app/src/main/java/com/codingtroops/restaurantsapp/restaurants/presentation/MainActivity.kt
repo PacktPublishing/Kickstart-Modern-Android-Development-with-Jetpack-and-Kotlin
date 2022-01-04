@@ -12,7 +12,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.codingtroops.restaurantsapp.restaurants.presentation.details.RestaurantDetailsScreen
 import com.codingtroops.restaurantsapp.restaurants.presentation.list.RestaurantsScreen
-import com.codingtroops.restaurantsapp.theme.RestaurantsAppTheme
+import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
 
 class MainActivity : ComponentActivity() {
 

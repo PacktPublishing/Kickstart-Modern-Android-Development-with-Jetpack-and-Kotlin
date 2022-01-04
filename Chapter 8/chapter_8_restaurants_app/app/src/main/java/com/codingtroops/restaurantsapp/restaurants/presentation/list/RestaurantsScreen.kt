@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codingtroops.restaurantsapp.restaurants.data.Restaurant
-import com.codingtroops.restaurantsapp.theme.RestaurantsAppTheme
+import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
 
 @Composable
 fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
