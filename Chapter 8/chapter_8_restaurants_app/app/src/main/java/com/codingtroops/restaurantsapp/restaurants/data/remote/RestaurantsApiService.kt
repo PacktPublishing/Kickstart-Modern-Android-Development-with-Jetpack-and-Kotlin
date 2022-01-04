@@ -1,6 +1,5 @@
 package com.codingtroops.restaurantsapp.restaurants.data.remote
 
-import com.codingtroops.restaurantsapp.restaurants.data.Restaurant
 import retrofit2.http.GET
 import retrofit2.http.Query
 

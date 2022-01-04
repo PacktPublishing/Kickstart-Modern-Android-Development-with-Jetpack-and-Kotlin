@@ -2,8 +2,10 @@ package com.codingtroops.restaurantsapp.restaurants.data
 
 import com.codingtroops.restaurantsapp.*
 import com.codingtroops.restaurantsapp.restaurants.data.local.LocalRestaurant
+import com.codingtroops.restaurantsapp.restaurants.data.local.PartialLocalRestaurant
 import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDb
 import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
+import com.codingtroops.restaurantsapp.restaurants.domain.Restaurant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -68,7 +70,7 @@ class RestaurantsRepository {
         })
         restaurantsDao.updateAll(
             favoriteRestaurants.map {
-                PartialLocalRestaurant(it.id, true)
+                PartialLocalRestaurant(id = it.id, isFavorite = true)
             })
     }
 }
