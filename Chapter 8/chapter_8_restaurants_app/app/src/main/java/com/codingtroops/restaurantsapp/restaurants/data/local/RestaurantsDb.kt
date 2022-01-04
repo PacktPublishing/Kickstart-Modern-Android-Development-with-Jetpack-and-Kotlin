@@ -9,8 +9,8 @@ import com.codingtroops.restaurantsapp.restaurants.data.Restaurant
 
 
 @Database(
-    entities = [Restaurant::class],
-    version = 2,
+    entities = [LocalRestaurant::class],
+    version = 3,
     exportSchema = false
 )
 abstract class RestaurantsDb : RoomDatabase() {

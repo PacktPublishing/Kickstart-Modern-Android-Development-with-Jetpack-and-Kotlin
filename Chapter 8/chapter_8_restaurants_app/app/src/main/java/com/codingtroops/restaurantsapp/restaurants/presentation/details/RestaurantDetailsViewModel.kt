@@ -33,7 +33,9 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
     private suspend fun getRemoteRestaurant(id: Int): Restaurant? {
         return withContext(Dispatchers.IO) {
             val response =  restInterface.getRestaurant(id)
-            return@withContext response[id.toString()]
+            return@withContext response[id.toString()]?.let {
+                Restaurant(id = it.id, title = it.title, description = it.description)
+            }
         }
     }
 }
