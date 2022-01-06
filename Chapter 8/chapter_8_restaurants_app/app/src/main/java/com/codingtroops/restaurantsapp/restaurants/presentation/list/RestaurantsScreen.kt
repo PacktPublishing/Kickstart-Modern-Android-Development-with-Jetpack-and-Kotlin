@@ -21,9 +21,11 @@ import com.codingtroops.restaurantsapp.restaurants.domain.Restaurant
 import com.codingtroops.restaurantsapp.ui.theme.RestaurantsAppTheme
 
 @Composable
-fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
-    val viewModel: RestaurantsViewModel = viewModel()
-    val state = viewModel.state.value
+fun RestaurantsScreen(
+    state: RestaurantsScreenState,
+    onItemClick: (id: Int) -> Unit,
+    onFavoriteClick: (id: Int, oldValue: Boolean) -> Unit
+) {
     Box(contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -35,7 +37,7 @@ fun RestaurantsScreen(onItemClick: (id: Int) -> Unit) {
             items(state.restaurants) { restaurant ->
                 RestaurantItem(restaurant,
                     onFavoriteClick = { id, oldValue ->
-                        viewModel.toggleFavorite(id, oldValue) },
+                        onFavoriteClick(id, oldValue) },
                     onItemClick = { id -> onItemClick(id) })
             }
         }
@@ -108,6 +110,7 @@ fun RestaurantDetails(title: String,
 @Composable
 fun DefaultPreview() {
     RestaurantsAppTheme {
-        RestaurantsScreen({})
+        RestaurantsScreen(RestaurantsScreenState(listOf(), true),
+            {}, { _, _ -> })
     }
 }
