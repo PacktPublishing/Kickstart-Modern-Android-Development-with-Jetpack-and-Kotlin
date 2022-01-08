@@ -4,14 +4,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codingtroops.restaurantsapp.restaurants.domain.GetRestaurantsUseCase
+import com.codingtroops.restaurantsapp.restaurants.domain.GetInitialRestaurantsUseCase
 import com.codingtroops.restaurantsapp.restaurants.domain.ToggleRestaurantUseCase
 import kotlinx.coroutines.*
 
 
 class RestaurantsViewModel() : ViewModel() {
     private val getRestaurantsUseCase =
-        GetRestaurantsUseCase()
+        GetInitialRestaurantsUseCase()
     private val toggleRestaurantsUseCase =
         ToggleRestaurantUseCase()
 

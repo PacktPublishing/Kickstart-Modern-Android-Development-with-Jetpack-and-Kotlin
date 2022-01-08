@@ -2,7 +2,7 @@ package com.codingtroops.restaurantsapp.restaurants.domain
 
 import com.codingtroops.restaurantsapp.restaurants.data.RestaurantsRepository
 
-class GetRestaurantsUseCase {
+class GetInitialRestaurantsUseCase {
     private val repository: RestaurantsRepository = RestaurantsRepository()
     private val getSortedRestaurantsUseCase = GetSortedRestaurantsUseCase()
     suspend operator fun invoke(): List<Restaurant> {
