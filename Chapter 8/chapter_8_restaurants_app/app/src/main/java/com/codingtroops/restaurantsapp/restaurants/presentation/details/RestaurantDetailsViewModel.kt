@@ -34,8 +34,7 @@ class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle): Vie
         return withContext(Dispatchers.IO) {
             val response =  restInterface.getRestaurant(id)
             return@withContext response[id.toString()]?.let {
-                Restaurant(id = it.id, title = it.title,
-                    description = it.description, isShutdown = it.isShutdown)
+                Restaurant(id = it.id, title = it.title, description = it.description)
             }
         }
     }

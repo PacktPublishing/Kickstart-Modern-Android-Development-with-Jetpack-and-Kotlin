@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codingtroops.restaurantsapp.restaurants.domain.GetRestaurantsUseCase
 import com.codingtroops.restaurantsapp.restaurants.domain.ToggleRestaurantUseCase
-import com.codingtroops.restaurantsapp.restaurants.presentation.list.RestaurantsScreenState
 import kotlinx.coroutines.*
 
 
 class RestaurantsViewModel() : ViewModel() {
-
-    private val getRestaurantsUseCase = GetRestaurantsUseCase()
-    private val toggleRestaurantsUseCase = ToggleRestaurantUseCase()
+    private val getRestaurantsUseCase =
+        GetRestaurantsUseCase()
+    private val toggleRestaurantsUseCase =
+        ToggleRestaurantUseCase()
 
     private val _state = mutableStateOf(
         RestaurantsScreenState(
@@ -34,7 +34,8 @@ class RestaurantsViewModel() : ViewModel() {
 
     fun toggleFavorite(itemId: Int, oldValue: Boolean) {
         viewModelScope.launch(errorHandler) {
-            val updatedRestaurants = toggleRestaurantsUseCase(itemId, oldValue)
+            val updatedRestaurants =
+                toggleRestaurantsUseCase(itemId, oldValue)
             _state.value = _state.value.copy(restaurants = updatedRestaurants)
         }
     }

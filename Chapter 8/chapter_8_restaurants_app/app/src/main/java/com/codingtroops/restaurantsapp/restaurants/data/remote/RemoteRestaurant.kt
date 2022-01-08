@@ -8,7 +8,4 @@ data class RemoteRestaurant(
     @SerializedName("r_title")
     val title: String,
     @SerializedName("r_description")
-    val description: String,
-    @SerializedName("is_shutdown")
-    val isShutdown: Boolean
-)
+    val description: String)

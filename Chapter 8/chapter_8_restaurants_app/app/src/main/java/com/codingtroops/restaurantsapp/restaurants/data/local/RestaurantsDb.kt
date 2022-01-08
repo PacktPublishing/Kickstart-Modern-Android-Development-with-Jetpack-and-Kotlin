@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [LocalRestaurant::class],
-    version = 4,
+    version = 3,
     exportSchema = false
 )
 abstract class RestaurantsDb : RoomDatabase() {

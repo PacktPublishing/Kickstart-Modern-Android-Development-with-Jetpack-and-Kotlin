@@ -5,7 +5,6 @@ import com.codingtroops.restaurantsapp.restaurants.data.local.LocalRestaurant
 import com.codingtroops.restaurantsapp.restaurants.data.local.PartialLocalRestaurant
 import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDb
 import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
-import com.codingtroops.restaurantsapp.restaurants.domain.IRestaurantsRepository
 import com.codingtroops.restaurantsapp.restaurants.domain.Restaurant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.net.ConnectException
 import java.net.UnknownHostException
 
-class RestaurantsRepository: IRestaurantsRepository {
+class RestaurantsRepository {
     private var restInterface: RestaurantsApiService =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -26,7 +25,7 @@ class RestaurantsRepository: IRestaurantsRepository {
         RestaurantsApplication.getAppContext()
     )
 
-    override suspend fun toggleFavoriteRestaurant(
+    suspend fun toggleFavoriteRestaurant(
         id: Int,
         value: Boolean
     ) = withContext(Dispatchers.IO) {
@@ -35,15 +34,15 @@ class RestaurantsRepository: IRestaurantsRepository {
         )
     }
 
-    override suspend fun getRestaurants(): List<Restaurant> {
+    suspend fun getRestaurants() : List<Restaurant> {
         return withContext(Dispatchers.IO) {
-            restaurantsDao.getAll().map {
-                Restaurant(it.id, it.title, it.description, it.isFavorite, it.isShutdown)
+            return@withContext restaurantsDao.getAll().map {
+                Restaurant(it.id, it.title, it.description, it.isFavorite)
             }
         }
     }
 
-    override suspend fun loadRestaurants() {
+    suspend fun loadRestaurants() {
         return withContext(Dispatchers.IO) {
             try {
                 refreshCache()
@@ -67,11 +66,11 @@ class RestaurantsRepository: IRestaurantsRepository {
         val remoteRestaurants = restInterface.getRestaurants()
         val favoriteRestaurants = restaurantsDao.getAllFavorited()
         restaurantsDao.addAll(remoteRestaurants.map {
-            LocalRestaurant(it.id, it.title, it.description, false, it.isShutdown)
+            LocalRestaurant(it.id, it.title, it.description, false)
         })
         restaurantsDao.updateAll(
             favoriteRestaurants.map {
-                PartialLocalRestaurant(it.id, true)
+                PartialLocalRestaurant(id = it.id, isFavorite = true)
             })
     }
 }
