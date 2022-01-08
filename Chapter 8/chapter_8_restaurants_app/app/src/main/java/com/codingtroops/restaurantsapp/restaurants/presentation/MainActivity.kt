@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 private fun RestaurantsApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "restaurants") {
-        composable(route = ", restaurants") {
+        composable(route = "restaurants") {
             val viewModel: RestaurantsViewModel = viewModel()
             RestaurantsScreen(
                 state = viewModel.state.value,
