@@ -3,6 +3,7 @@ package com.codingtroops.restaurantsapp.restaurants.data
 import com.codingtroops.restaurantsapp.*
 import com.codingtroops.restaurantsapp.restaurants.data.local.LocalRestaurant
 import com.codingtroops.restaurantsapp.restaurants.data.local.PartialLocalRestaurant
+import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDao
 import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDb
 import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
 import com.codingtroops.restaurantsapp.restaurants.domain.Restaurant
@@ -13,18 +14,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.ConnectException
 import java.net.UnknownHostException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RestaurantsRepository {
-    private var restInterface: RestaurantsApiService =
-        Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurants-db-default-rtdb.firebaseio.com/")
-            .build()
-            .create(RestaurantsApiService::class.java)
-    private var restaurantsDao = RestaurantsDb.getDaoInstance(
-        RestaurantsApplication.getAppContext()
-    )
-
+@Singleton
+class RestaurantsRepository @Inject constructor(
+    private val restInterface: RestaurantsApiService,
+    private val restaurantsDao: RestaurantsDao
+) {
     suspend fun toggleFavoriteRestaurant(
         id: Int,
         value: Boolean
