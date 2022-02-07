@@ -78,4 +78,8 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.38.1"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-rc01'
 
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0-RC'
 }
