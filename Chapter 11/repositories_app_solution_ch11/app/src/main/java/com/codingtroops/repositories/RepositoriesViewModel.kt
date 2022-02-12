@@ -11,7 +11,6 @@ class RepositoriesViewModel(
     = DependencyContainer.repositoriesRetrofitClient
 ) : ViewModel() {
     val repositories = mutableStateOf(emptyList<Repository>())
-
     init {
         viewModelScope.launch {
             repositories.value = restInterface.getRepositories().repos

@@ -1,15 +1,13 @@
 package com.codingtroops.repositories
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 
@@ -21,12 +19,13 @@ fun RepositoriesScreen(repos: List<Repository>) {
             horizontal = 8.dp
         )
     ) {
-        items(repos) { repo -> RepositoryItem(repo) }
+        itemsIndexed(repos) { index, repo ->
+            RepositoryItem(index, repo) }
     }
 }
 
 @Composable
-fun RepositoryItem(item: Repository) {
+fun RepositoryItem(index: Int, item: Repository) {
     Card(
         elevation = 4.dp,
         modifier = Modifier.padding(8.dp).height(120.dp)
@@ -35,22 +34,21 @@ fun RepositoryItem(item: Repository) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
         ) {
-            Image(
-                imageVector = Icons.Filled.Build,
-                contentDescription = "Repo icon",
+            Text(
+                text = index.toString(),
+                style = MaterialTheme.typography.h6,
                 modifier = Modifier
                     .weight(0.2f)
-                    .padding(8.dp)
-            )
+                    .padding(8.dp))
             Column(modifier = Modifier.weight(0.8f)) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.h6
-                )
+                    style = MaterialTheme.typography.h6)
                 Text(
                     text = item.description,
-                    style = MaterialTheme.typography.body2
-                )
+                    style = MaterialTheme.typography.body2,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 3)
             }
         }
     }

@@ -2,6 +2,11 @@ package com.codingtroops.repositories
 
 import com.google.gson.annotations.SerializedName
 
+
+data class RepositoriesResponse(
+    @SerializedName("items") val repos: List<Repository>
+)
+
 data class Repository(
     @SerializedName("id")
     val id: String,
@@ -9,8 +14,4 @@ data class Repository(
     val name: String,
     @SerializedName("description")
     val description: String,
-)
-
-data class RepositoriesResponse(
-    @SerializedName("items") val repos: List<Repository>
 )
