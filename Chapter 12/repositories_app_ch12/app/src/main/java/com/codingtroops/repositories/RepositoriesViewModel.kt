@@ -1,5 +1,6 @@
 package com.codingtroops.repositories
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -17,5 +18,20 @@ class RepositoriesViewModel(
         pagingSourceFactory = {
             reposPagingSource
         }).flow.cachedIn(viewModelScope)
+
+    val timerState = mutableStateOf("")
+    private var timer: CustomCountdown = CustomCountdown(
+        onTick = { msLeft ->
+            timerState.value =
+                (msLeft / 1000).toString() + " seconds left"
+        },
+        onFinish = {
+            timerState.value = "You won a prize!"
+        })
+
+    override fun onCleared() {
+        super.onCleared()
+        timer.stop()
+    }
 }
 
