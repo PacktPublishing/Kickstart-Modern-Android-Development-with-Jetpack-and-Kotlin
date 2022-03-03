@@ -19,7 +19,10 @@ class MainActivity : ComponentActivity() {
                 val timerText = viewModel.timerState.value
                 val lazyRepoItems: LazyPagingItems<Repository> =
                     reposFlow.collectAsLazyPagingItems()
-                RepositoriesScreen(lazyRepoItems, timerText)
+                RepositoriesScreen(lazyRepoItems, timerText,
+                    getTimer = {
+                        viewModel.timer
+                    })
             }
         }
     }

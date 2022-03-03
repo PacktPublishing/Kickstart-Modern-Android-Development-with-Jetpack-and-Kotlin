@@ -20,7 +20,7 @@ class RepositoriesViewModel(
         }).flow.cachedIn(viewModelScope)
 
     val timerState = mutableStateOf("")
-    private var timer: CustomCountdown = CustomCountdown(
+    var timer: CustomCountdown = CustomCountdown(
         onTick = { msLeft ->
             timerState.value =
                 (msLeft / 1000).toString() + " seconds left"
