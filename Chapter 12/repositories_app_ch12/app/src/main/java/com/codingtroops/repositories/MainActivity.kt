@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
                 RepositoriesScreen(lazyRepoItems, timerText,
                     getTimer = {
                         viewModel.timer
-                    })
+                    },
+                    onPauseTimer = { viewModel.timer.stop() })
             }
         }
     }

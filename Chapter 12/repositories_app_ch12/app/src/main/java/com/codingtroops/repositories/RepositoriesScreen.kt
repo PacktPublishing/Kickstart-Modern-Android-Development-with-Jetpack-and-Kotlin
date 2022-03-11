@@ -19,7 +19,8 @@ import androidx.paging.compose.itemsIndexed
 @Composable
 fun RepositoriesScreen(repos: LazyPagingItems<Repository>,
                        timerText: String,
-                       getTimer: () -> CustomCountdown) {
+                       getTimer: () -> CustomCountdown,
+                       onPauseTimer: () -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
@@ -27,7 +28,7 @@ fun RepositoriesScreen(repos: LazyPagingItems<Repository>,
         )
     ) {
         item {
-            CountdownItem(timerText, getTimer)
+            CountdownItem(timerText, getTimer, onPauseTimer)
         }
         itemsIndexed(repos) { index, repo ->
             if (repo != null) {
@@ -142,13 +143,15 @@ fun ErrorItem(
 
 @Composable
 private fun CountdownItem(timerText: String,
-                          getTimer: () -> CustomCountdown) {
+                          getTimer: () -> CustomCountdown,
+                          onPauseTimer: () -> Unit) {
     val lifecycleOwner: LifecycleOwner
                 = LocalLifecycleOwner.current
     val lifecycle = lifecycleOwner.lifecycle
     DisposableEffect(key1 = lifecycleOwner) {
         lifecycle.addObserver(getTimer())
         onDispose {
+            onPauseTimer()
             lifecycle.removeObserver(getTimer())
         }
     }
