@@ -34,10 +34,10 @@ class RestaurantsViewModel @Inject constructor(
         getRestaurants()
     }
 
-    fun toggleFavorite(itemId: Int, oldValue: Boolean) {
+    fun toggleFavorite(id: Int, oldValue: Boolean) {
         viewModelScope.launch(errorHandler + dispatcher) {
             val updatedRestaurants =
-                toggleRestaurantsUseCase(itemId, oldValue)
+                toggleRestaurantsUseCase(id, oldValue)
             _state.value = _state.value.copy(restaurants = updatedRestaurants)
         }
     }

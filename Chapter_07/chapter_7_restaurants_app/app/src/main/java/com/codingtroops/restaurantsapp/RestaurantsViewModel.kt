@@ -26,10 +26,10 @@ class RestaurantsViewModel() : ViewModel() {
         getRestaurants()
     }
 
-    fun toggleFavorite(itemId: Int, oldValue: Boolean) {
+    fun toggleFavorite(id: Int, oldValue: Boolean) {
         viewModelScope.launch(errorHandler) {
             val updatedRestaurants =
-                repository.toggleFavoriteRestaurant(itemId, oldValue)
+                repository.toggleFavoriteRestaurant(id, oldValue)
             _state.value = _state.value.copy(restaurants = updatedRestaurants)
         }
     }

@@ -24,9 +24,9 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
         getRestaurants()
     }
 
-    fun toggleFavorite(itemId: Int) {
+    fun toggleFavorite(id: Int) {
         val restaurants = state.value.toMutableList()
-        val itemIndex = restaurants.indexOfFirst { it.id == itemId }
+        val itemIndex = restaurants.indexOfFirst { it.id == id }
         val item = restaurants[itemIndex]
         restaurants[itemIndex] = item.copy(isFavorite = !item.isFavorite)
         storeSelection(restaurants[itemIndex])
