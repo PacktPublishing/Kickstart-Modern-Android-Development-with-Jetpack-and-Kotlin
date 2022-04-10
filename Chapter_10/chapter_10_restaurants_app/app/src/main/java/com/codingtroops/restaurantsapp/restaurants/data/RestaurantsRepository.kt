@@ -5,15 +5,11 @@ import com.codingtroops.restaurantsapp.restaurants.data.di.IoDispatcher
 import com.codingtroops.restaurantsapp.restaurants.data.local.LocalRestaurant
 import com.codingtroops.restaurantsapp.restaurants.data.local.PartialLocalRestaurant
 import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDao
-import com.codingtroops.restaurantsapp.restaurants.data.local.RestaurantsDb
 import com.codingtroops.restaurantsapp.restaurants.data.remote.RestaurantsApiService
 import com.codingtroops.restaurantsapp.restaurants.domain.Restaurant
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.net.ConnectException
 import java.net.UnknownHostException
 import javax.inject.Inject

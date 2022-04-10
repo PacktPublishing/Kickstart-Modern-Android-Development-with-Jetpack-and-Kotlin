@@ -1,10 +1,8 @@
 package com.codingtroops.restaurantsapp
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,9 +24,9 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
         getRestaurants()
     }
 
-    fun toggleFavorite(itemId: Int) {
+    fun toggleFavorite(id: Int) {
         val restaurants = state.value.toMutableList()
-        val itemIndex = restaurants.indexOfFirst { it.id == itemId }
+        val itemIndex = restaurants.indexOfFirst { it.id == id }
         val item = restaurants[itemIndex]
         restaurants[itemIndex] = item.copy(isFavorite = !item.isFavorite)
         storeSelection(restaurants[itemIndex])

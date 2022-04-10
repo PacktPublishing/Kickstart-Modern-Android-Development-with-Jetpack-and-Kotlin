@@ -1,7 +1,6 @@
 package com.codingtroops.restaurantsapp
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
@@ -32,10 +31,10 @@ class RestaurantsViewModel() : ViewModel() {
         getRestaurants()
     }
 
-    fun toggleFavorite(itemId: Int, oldValue: Boolean) {
+    fun toggleFavorite(id: Int, oldValue: Boolean) {
         viewModelScope.launch(errorHandler) {
             val updatedRestaurants =
-                toggleFavoriteRestaurant(itemId, oldValue)
+                toggleFavoriteRestaurant(id, oldValue)
             state.value = updatedRestaurants
         }
     }
