@@ -19,7 +19,8 @@ class RestaurantsViewModel(private val stateHandle: SavedStateHandle) : ViewMode
 
     private fun storeSelection(item: Restaurant) {
         val savedToggled = stateHandle.get<List<Int>?>(FAVORITES)
-            .orEmpty().toMutableList()
+            .orEmpty()
+            .toMutableList()
         if (item.isFavorite) savedToggled.add(item.id)
         else savedToggled.remove(item.id)
         stateHandle[FAVORITES] = savedToggled
