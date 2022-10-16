@@ -24,6 +24,10 @@ If you feel this book is for you, get your [copy](https://www.amazon.com/dp/1801
 <a href="https://www.packtpub.com/?utm_source=github&utm_medium=banner&utm_campaign=GitHubBanner"><img src="https://raw.githubusercontent.com/PacktPublishing/GitHub/master/GitHub.png" 
 alt="https://www.packtpub.com/" border="5" /></a>
 
+## Branches
+Like any other software, Android, Kotlin and Jetpack evolve. Here are the branches we're maintaning which will allow you to follow this book with newer versions of Jetpack and Kotlin:
+- `main` - contains the code showcased in the book with Compose 1.1.1 and Kotlin 1.6.10
+- `compose_1.2` - contains the code showcased in the book but updated for Compose 1.2.1 and Kotlin 1.7.0
 
 ## Instructions and Navigations
 All of the project files are organized into folders. For example, Chapter01.
