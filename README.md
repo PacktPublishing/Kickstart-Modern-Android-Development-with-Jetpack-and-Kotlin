@@ -46,6 +46,18 @@ Text(text = "Greetings $name!")
 
 ```
 
+* Errata
+Page number 289:
+
+It is:
+```
+val repoDependency = DependencyContainer.repository
+```
+It should be:
+```
+val repoDependency = DependencyContainer.repo
+```
+
 **Following is what you need for this book:**
 
 This book is for junior and intermediate-level Android developers looking to level up their Android development skills to develop high-quality apps using Jetpack libraries and other cutting-edge technologies. Beginners with knowledge of Android development fundamentals will also find this book useful. Familiarity with Kotlin is assumed.	
